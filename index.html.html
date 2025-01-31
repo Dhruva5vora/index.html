@@ -3,98 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishlist | Adaa Jaipur</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Search</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
-        
         body {
-            background: url('https://source.unsplash.com/1600x900/?indian-textile') no-repeat center center/cover;
-            padding: 2rem;
-        }
-        .wishlist-container {
-            background: rgba(255, 248, 240, 0.9);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            background-color:  #f8f2ec; 
             text-align: center;
-            max-width: 900px;
+            padding: 50px;
+        }
+        .search-container {
+            max-width: 500px;
             margin: auto;
+            position: relative;
         }
-        .wishlist-container h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: #8B0000;
+        .search-box {
+            padding: 10px;
+            width: 120%;
+            max-width: 400px;
+            border: 1px solid #D8A7B1;
+            border-radius: 10px;
+            outline: none;
         }
-        .wishlist-item {
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d4a373;
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+            padding-right: 40px;
+        }
+        .clear-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #d4a373;
+            display: none;
+        }
+        .suggestions {
+            position: absolute;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background: #f0e6d2;
+        }
+        .close-btn {
+            position: absolute;
+            right: -30%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+        }
+        .product-list {
+            display: none;
+            width: 80%;
+            max-width: 400px;
+            background: #fff;
+            border: 1px solid #D8A7B1;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        .product-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: white;
             padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
         }
-        .wishlist-item img {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
+        .product-item:last-child {
+            border-bottom: none;
         }
-        .wishlist-item .info {
-            flex: 1;
-            margin-left: 10px;
-            text-align: left;
+        .product-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
         }
-        .wishlist-item h5 {
-            margin: 0;
-            color: #8B0000;
-            font-family: 'Georgia', serif;
+        .product-details {
+            display: flex;
+            flex-direction: column;
         }
-        .wishlist-item p {
-            margin: 0;
-            color: #555;
-        }
-        .btn-move-cart {
-            background-color: #DAA520;
+        html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-container {
+    flex: 1;
+}
+        .footer {
+            background-color: #B17A7A;
             color: white;
-            border-radius: 8px;
-            padding: 5px 10px;
-            border: none;
-        }
-        .btn-remove {
-            background-color: #B22222;
-            color: white;
-            border-radius: 8px;
-            padding: 5px 10px;
-            border: none;
+            text-align: center;
+            padding: 15px;
+            margin-top: auto;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="wishlist-container">
-        <h2>Your Wishlist</h2>
-        
-        <div class="wishlist-item">
-            <img src="https://source.unsplash.com/100x100/?saree" alt="Product">
-            <div class="info">
-                <h5>Banarasi Silk Saree</h5>
-                <p>₹4,999</p>
-            </div>
-            <button class="btn-move-cart">Move to Cart</button>
-            <button class="btn-remove">Remove</button>
-        </div>
-
-        <div class="wishlist-item">
-            <img src="https://source.unsplash.com/100x100/?lehenga" alt="Product">
-            <div class="info">
-                <h5>Embroidered Lehenga</h5>
-                <p>₹7,999</p>
-            </div>
-            <button class="btn-move-cart">Move to Cart</button>
-            <button class="btn-remove">Remove</button>
-        </div>
+    <h2>Search Bar</h2>
+    
+    <div class="search-container">
+        <input type="text" id="search" class="search-box" placeholder="Search in Adaa Jaipur Store" oninput="searchProducts()">
+        <button id="close-btn" class="close-btn" onclick="clearSearch()">&times;</button>
+        <div id="product-list" class="product-list"></div>
     </div>
+    <div class="footer">
+        &copy; 2025, AdaaJaipur - All Rights Reserved
+    </div>
+
+    <script>
+        
+        const products = [
+            { name: "A-line Kurta", image: "https://i.postimg.cc/vZKddTqX/IMG-20250128-194920.jpg", description: "Flowy grey floral printed kurta.", category: ["kur", "kurt", "kurta"] },
+            { name: "Embroidery Kurta", image: "https://i.postimg.cc/rmp3Hkcx/IMG-20250128-195014.jpg", description: "White round neck embroidered kurta.", category: ["kur", "kurt", "kurta"] },
+            { name: "Straight Line Kurta", image: "https://i.postimg.cc/sDPBX9P1/IMG-20250128-195118.jpg", description: "Mustard yellow printed straight line kurta.", category: ["kur", "kurt", "kurta"] },
+            { name: "Festive Kurta Set", image: "https://i.postimg.cc/G3fLWLfz/IMG-20250128-214634.jpg", description: "Maroon sequinned kurta with trousers.", category: ["kurta s", "kurta se", "kurta set", "set"] },
+            { name: "Kurta Pants", image: "https://i.postimg.cc/G3D31w1C/IMG-20250128-214714.jpg", description: "Red anarkali kurta set.", category: ["kurta s", "kurta se", "kurta set", "set"] },
+            { name: "Kurta Set with Dupatta", image: "https://i.postimg.cc/8CTf7kNM/IMG-20250128-214753.jpg", description: "Beautiful pink floral kurta set.", category: ["kurta s", "kurta se", "kurta set", "set"] }, 
+            { name: "Ankle Length Gown", image: "https://i.postimg.cc/Y05m0pyK/IMG-20250128-214506.jpg", description: "Green ankle length gown with belt & embroidery.", category: ["go", "gow", "gown", "gowns"] },
+            { name: "Festive Gown", image: "https://i.postimg.cc/L5pqLHMz/IMG-20250128-214548.jpg", description: "Long green gown malmal dupatta & sequence work.", category: ["go", "gow", "gown", "gowns"] },
+            { name: "Gown with Dupatta", image: "https://i.postimg.cc/4NnKc2D2/IMG-20250128-214617.jpg", description: "Teal gown with chinon dupatta & lace work.", category: ["go", "gow", "gown", "gowns"] }, 
+            { name: "Shirt", image: "https://i.postimg.cc/YCvM8JRZ/IMG-20250128-214813.jpg", description: "Maroon sequinned kurta with trousers.", category: ["top", "tops", "tunic", "tunics"] },
+            { name: "Short Tops", image: "https://i.postimg.cc/N0TYvmWx/IMG-20250128-214833.jpg", description: "Red anarkali kurta set.", category: ["top", "tops", "tunic", "tunics"] },
+            { name: "Tops & Tunics", image: "https://i.postimg.cc/vBbRRj7Q/IMG-20250128-214854.jpg", description: "Beautiful pink floral kurta set.", category: ["top", "tops", "tunic", "tunics"] }
+        ];
+
+        function searchProducts() {
+            const searchBox = document.getElementById("search").value.toLowerCase().trim();
+            const closeButton = document.getElementById("close-btn");
+            const productList = document.getElementById("product-list");
+
+            closeButton.style.display = searchBox.length > 0 ? "inline" : "none";
+
+            const matchedProducts = products.filter(product => 
+                product.category.some(cat => searchBox.includes(cat))
+            );
+
+            if (matchedProducts.length > 0) {
+                productList.innerHTML = matchedProducts.map(product =>
+                    `<div class="product-item">
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="product-details">
+                            <span class="product-name">${product.name}</span>
+                            <span class="product-description">${product.description}</span>
+                        </div>
+                    </div>`
+                ).join("");
+                productList.style.display = "block";
+            } else {
+                productList.style.display = "none";
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById("search").value = "";
+            document.getElementById("close-btn").style.display = "none";
+        }
+        
+    </script>
 </body>
 </html>
